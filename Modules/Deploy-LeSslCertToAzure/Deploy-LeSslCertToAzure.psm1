@@ -254,7 +254,8 @@ Function Deploy-LeSslCertToAzure() {
   
         # Load cert
         Write-Verbose "Adding SSL/TLS Certificate: $signedSslCertificate."
-        Add-AzureRmApplicationGatewaySslCertificate -ApplicationGateway $appGateway -Name $dnsCertAlias -CertificateFile $signedSslCertificate -Password $certPassword
+        $certPasswordSecured = ConvertTo-SecureString $certPassword -AsPlainText -Force
+        Add-AzureRmApplicationGatewaySslCertificate -ApplicationGateway $appGateway -Name $dnsCertAlias -CertificateFile $signedSslCertificate -Password $certPasswordSecured
         $cert = Get-AzureRmApplicationGatewaySslCertificate -ApplicationGateway $appGateway -Name $dnsCertAlias
         # Get frontEndIP
         $fipconfig = Get-AzureRmApplicationGatewayFrontendIPConfig -ApplicationGateway $appGateway
